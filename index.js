@@ -4,7 +4,9 @@ import mongoose from "mongoose"
 import userRouter from "./Router/UserRouter.js";
 import productRouter from "./Router/ProductRouter.js";
 import jwt from "jsonwebtoken"; //get http reqest (json wep token eka amunamma)
+import dotenv from "dotenv" //hide github private things
 
+dotenv.config();//run env file
 
 const app=express();
 app.use(bodyParser.json());
@@ -29,7 +31,7 @@ app.use(bodyParser.json());
 })   
   
 
-let mongoURL="mongodb+srv://Shanu:123@cluster0.lv3kj.mongodb.net/User?retryWrites=true&w=majority&appName=Cluster0";
+let mongoURL=process.env.Mongo_URL;
 mongoose.connect(mongoURL);
 let connection=mongoose.connection;
 connection.once("open",()=>{
