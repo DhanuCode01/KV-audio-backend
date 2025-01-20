@@ -18,7 +18,7 @@ app.use(bodyParser.json());
     
      if (token!=null){
         token=token.replace("Bearer ","") //"Bearer" Skip this word  
-        jwt.verify(token,"kvsecret-891",
+        jwt.verify(token,process.env.jwt_SECRET,
             (err,decoded)=>{                //get error or decoded value
                 if(!err){
                     req.user=decoded;      //req eke user kiyana ekata decoded value eka assigning kirima

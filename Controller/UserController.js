@@ -38,7 +38,7 @@ export function LoginUser(req,res){
                     lastName:user.lastName,
                     email:user.email,                   
                     type:user.type,
-                },"kvsecret-891")
+                },process.env.jwt_SECRET)
 
                 res.json({success:"Login Successfuly",token:token
                     
