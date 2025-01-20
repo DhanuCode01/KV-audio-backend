@@ -1,7 +1,9 @@
 import users from "../Models/User.js";
 import bcrypt from "bcrypt";
 import jwt  from "jsonwebtoken"; //get http reqest (json wep token eka amunamma)
+import dotenv from "dotenv"
 
+dotenv.config();
 
 export function reqestUser(req,res){
     const data=req.body;
