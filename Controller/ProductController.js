@@ -5,7 +5,7 @@ export function  addProduct(req,res){  //add new product
     // console.log(req.user);   //get reqest's user value
      if (req.user==null){           //token ekak thiyeda balamu
         res.status(401).json({
-            Message:"pleace login and try again"   
+            Message:"pleace login and Try again"   
         })
         return
     } 
