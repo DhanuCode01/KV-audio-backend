@@ -8,7 +8,7 @@ export function addReviwe(req,res){
         })
         return
     } 
-}
+
 
 const data =req.body;       //assigning reqest body details  
 
@@ -25,3 +25,5 @@ newReviwe.save().then(()=>{           //save data
 }).catch((error)=>{
     res.status(500).json({error:"Reviwe add Unsuccessfully"})
 })
+
+}

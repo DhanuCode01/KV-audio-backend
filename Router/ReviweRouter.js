@@ -3,3 +3,5 @@ import { addReviwe } from "../Controller/ReviweController.js";
 
 const reviweRouter=express.Router();
 reviweRouter.post("/",addReviwe);
+
+export default reviweRouter;

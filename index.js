@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose"
 import userRouter from "./Router/UserRouter.js";
 import productRouter from "./Router/ProductRouter.js";
+import reviweRouter from "./Router/ReviweRouter.js";
 import jwt from "jsonwebtoken"; //get http reqest (json wep token eka amunamma)
 import dotenv from "dotenv" //hide github private things
 
@@ -41,6 +42,7 @@ connection.once("open",()=>{
 
 app.use("/api/user",userRouter);
 app.use("/api/product",productRouter);
+app.use("api/reviwe",reviweRouter);
 
 
 app.listen(3000,()=>{
