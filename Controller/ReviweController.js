@@ -30,7 +30,7 @@ newReviwe.save().then(()=>{           //save data
 
 //filter reviwe
 export function getReviwe(req,res){
-   // const user =req.body;
+   
     if (req.user==null){           //check if you have an token
         res.status(401).json({
             Message:"pleace login and Try again"   
@@ -51,3 +51,44 @@ export function getReviwe(req,res){
         return
     }
 }
+
+// delete router reviwes
+
+export function deleteReviwe(req,res){
+    const email=req.params.email;
+
+    
+    if (req.user==null){           //check if you have an token
+        res.status(401).json({
+            Message:"pleace login and Try again"   
+        })
+        return
+    }
+    if(req.user.type== "admin"){
+
+        Review.deleteOne({email:email}).then(()=>{
+            res.json({Message:"review delete successfully"});      //If you are an admin, delete all
+        }).catch(()=>{
+            res.status(500).json({error:"review delete failed"})
+        });
+        return
+    }
+
+    if (req.user.type=="customer"){
+
+        Review.deleteOne({email:email}).then(()=>{
+            res.json({Message:"review delete successfully"});      //If you are customer,Delete only the rating sent to your email.
+        }).catch(()=>{
+            res.status(500).json({error:"review delete failed"})
+        });
+
+    }else{
+        res.status(403).json({error:"your not authorized to perform this acction"})
+
+    }
+
+}
+
+
+
+
