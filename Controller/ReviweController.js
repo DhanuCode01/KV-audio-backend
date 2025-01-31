@@ -89,6 +89,40 @@ export function deleteReviwe(req,res){
 
 }
 
+//approved rating(only approvedReviwe)
+
+export function approvedReviwe(req,res){
+
+    const email=req.params.email;
+
+    
+    if (req.user==null){           //check if you have an token
+        res.status(401).json({
+            Message:"pleace login and Try again"   
+        })
+        return
+    }
+
+    if(req.user.type == "admin"){      //if bearer token is admin
+        Review.updateOne({
+            email:email,                //check If the sent email is the same as the email in the database
+        },{
+            isApproved:true,            //change approved true
+        }).then(()=>{
+            res.status(200).json({
+                Message:"Review approved Successfully"   
+            })
+        }).catch(()=>{
+            res.status(500).json({
+            error:"Review approved Failed"   
+        })
+    })
+    }else{{
+        res.status(403).json({error:"your not authorized to perform this acction"})
+
+    }}
+
+}
 
 
 
