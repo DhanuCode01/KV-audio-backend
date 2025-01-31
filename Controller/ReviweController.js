@@ -30,15 +30,24 @@ newReviwe.save().then(()=>{           //save data
 
 //filter reviwe
 export function getReviwe(req,res){
-    const user =req.body;
+   // const user =req.body;
+    if (req.user==null){           //check if you have an token
+        res.status(401).json({
+            Message:"pleace login and Try again"   
+        })
+        return
+    }
 
-    if (user == null || user.role != "admin"){              //If you are not an admin, only approved reviews will be shown.
-        Review.find({isApproved:true}).then((reviwes)=>{
-            res.json(reviwes);
+    if (req.user.type != "admin"){              //If you are not an admin, only approved reviews will be shown.
+        Review.find({isApproved:true}).then((reviews)=>{
+            res.json(reviews);
         })
-    }else{
-        Review.find().then((reviwes)=>{                        //If you are an admin, all reviews will be displayed.
-            res.json(reviwes);
+        return
+    } 
+    if(req.user.type =="admin"){
+        Review.find().then((reviews)=>{                        //If you are an admin, all reviews will be displayed.
+            res.json(reviews);
         })
+        return
     }
 }

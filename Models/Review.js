@@ -33,6 +33,6 @@ const reviweSchema=new mongoose.Schema({
     }
 })
 
-const Review =mongoose.model("Review",reviweSchema);
+const Review =mongoose.model("Reviews",reviweSchema);
 
 export default Review;
