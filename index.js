@@ -42,7 +42,7 @@ connection.once("open",()=>{
 
 app.use("/api/user",userRouter);
 app.use("/api/product",productRouter);
-app.use("api/reviwe",reviweRouter);
+app.use("/api/reviwe",reviweRouter);
 
 
 app.listen(3000,()=>{
