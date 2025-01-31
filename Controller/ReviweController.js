@@ -32,10 +32,10 @@ newReviwe.save().then(()=>{           //save data
 export function getReviwe(req,res){
     const user =req.body;
 
-    if (usre == null || user.role != "admin"){              //If you are not an admin, only approved reviews will be shown.
-        Review.find({isApproved:true}.then((reviwes)=>{
+    if (user == null || user.role != "admin"){              //If you are not an admin, only approved reviews will be shown.
+        Review.find({isApproved:true}).then((reviwes)=>{
             res.json(reviwes);
-        }))
+        })
     }else{
         Review.find().then((reviwes)=>{                        //If you are an admin, all reviews will be displayed.
             res.json(reviwes);
