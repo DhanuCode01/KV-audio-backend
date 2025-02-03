@@ -1,8 +1,8 @@
 import Review from "../Models/Review.js";
 
-export function addReviwe(req,res){
+export async function addReviwe(req,res){           //To run await, the function is specified as async.
      // console.log(req.user);   //get reqest's user value
-     if (req.user==null){           //token ekak thiyeda balamu
+     if (req.user==null){           //check have a token
         res.status(401).json({
             Message:"pleace login and Try again"   
         })
@@ -18,18 +18,19 @@ data.email=req.user.email;
 
 const newReviwe=new Review(data);
 
-newReviwe.save().then(()=>{           //save data
-    res.json({
-        Message:"Reviwe add Successfully"
-    })
-}).catch((error)=>{
+try{                                        //The line below in the try will not run until the new reviwe saves.
+       await newReviwe.save();           //save data
+            res.status(200).json({
+             Message:"Reviwe add Successfully"
+            })
+}catch(error){                                                      //  //If the lines are not running, it is a connection error.
     res.status(500).json({error:"Reviwe add Unsuccessfully"})
-})
+}
 
 }
 
 //filter reviwe
-export function getReviwe(req,res){
+export async function getReviwe(req,res){                //To run await, the function is specified as async.
    
     if (req.user==null){           //check if you have an token
         res.status(401).json({
@@ -38,23 +39,48 @@ export function getReviwe(req,res){
         return
     }
 
+
+
     if (req.user.type != "admin"){              //If you are not an admin, only approved reviews will be shown.
-        Review.find({isApproved:true}).then((reviews)=>{
-            res.json(reviews);
-        })
+        try{
+                const reviews=await Review.find({isApproved:true});             //The line below in the try will not run until the user fine.  
+                    res.status(200).json(reviews);                                              //The user reviews from "promises", which are one of the "built-in functions" of the mongo DB.
+                   
+        }catch(error){                                                       //If the lines are not running, it is a connection error.
+            res.status(500).json({
+               error:"database connection un successfully"})
+        }
+
+
         return
     } 
-    if(req.user.type =="admin"){
-        Review.find().then((reviews)=>{                        //If you are an admin, all reviews will be displayed.
-            res.json(reviews);
-        })
+
+
+
+    if(req.user.type =="admin"){                  //If you are an admin, all reviews will be displayed.
+
+          try{
+            const reviews=await Review.find();             //The line below in the try will not run until the user fine.  
+                res.status(200).json(reviews);                         //The user reviews from "promises", which are one of the "built-in functions" of the mongo DB.
+               
+            }catch(error){                                                       //If the lines are not running, it is a connection error.
+                res.status(500).json({
+                    error:"database connection un successfully"})
+            }
+
+
+       
         return
     }
 }
 
+
+
+
+
 // delete router reviwes
 
-export function deleteReviwe(req,res){
+export async function deleteReviwe(req,res){         //To run await, the function is specified as async.
     const email=req.params.email;
 
     
@@ -64,23 +90,28 @@ export function deleteReviwe(req,res){
         })
         return
     }
-    if(req.user.type== "admin"){
 
-        Review.deleteOne({email:email}).then(()=>{
-            res.json({Message:"review delete successfully"});      //If you are an admin, delete all
-        }).catch(()=>{
-            res.status(500).json({error:"review delete failed"})
-        });
+    if(req.user.type== "admin"){                        //If you are an admin, delete all
+
+        try{
+                await Review.deleteOne({email:email});                          //The line below in the try will not run until the user fine. 
+                    res.status(200).json({Message:"review delete successfully"});      
+
+        }catch(exception){
+            res.status(500).json({error:"review delete failed"})               //If the lines are not running, it is a connection error.
+        };
         return
     }
 
-    if (req.user.type=="customer"){
+    if (req.user.type=="customer"   &&  req.user.email==email){
 
-        Review.deleteOne({email:email}).then(()=>{
-            res.json({Message:"review delete successfully"});      //If you are customer,Delete only the rating sent to your email.
-        }).catch(()=>{
-            res.status(500).json({error:"review delete failed"})
-        });
+        try{
+                await Review.deleteOne({email:email});
+                        res.status(200).json({Message:"review delete successfully"});      //If you are customer,Delete only the rating sent to your email.
+        }catch(exception){
+
+                        res.status(500).json({error:"review delete failed"})                ////If the lines are not running, it is a connection error.
+        };
 
     }else{
         res.status(403).json({error:"your not authorized to perform this acction"})
@@ -91,7 +122,7 @@ export function deleteReviwe(req,res){
 
 //approved rating(only approvedReviwe)
 
-export function approvedReviwe(req,res){
+export async function approvedReviwe(req,res){              //To run await, the function is specified as async.
 
     const email=req.params.email;
 
@@ -104,19 +135,20 @@ export function approvedReviwe(req,res){
     }
 
     if(req.user.type == "admin"){      //if bearer token is admin
-        Review.updateOne({
-            email:email,                //check If the sent email is the same as the email in the database
-        },{
-            isApproved:true,            //change approved true
-        }).then(()=>{
+        try{
+
+            await Review.updateOne({email:email}                //check If the sent email is the same as the email in the database
+            ,{
+                isApproved:true,            //change approved true
+            })
             res.status(200).json({
                 Message:"Review approved Successfully"   
             })
-        }).catch(()=>{
+        }catch(error){
             res.status(500).json({
-            error:"Review approved Failed"   
+            error:"Review approved Failed"              //If the lines are not running, it is a connection error.
         })
-    })
+    }
     }else{{
         res.status(403).json({error:"your not authorized to perform this acction"})
 

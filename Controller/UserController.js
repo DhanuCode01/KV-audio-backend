@@ -35,7 +35,7 @@ export async function LoginUser(req,res){                    //To run await, the
 
     try{
         const user =await users.findOne({email:data.email}) ;       //The line below in the try will not run until the user fine.  
-                                                                    //The user comes from promises, which are one of the built-in functions of the mongo DB.
+                                                                    //The user comes from "promises", which are one of the "built-in functions" of the mongo DB.
         
             if(user==null){
                 res.status(404).json({error:"User is not Found"})           
