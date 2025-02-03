@@ -26,18 +26,22 @@ export async  function reqestUser(req,res){     //To run await, the function is 
 
 }
 
-export async function LoginUser(req,res){
+
+
+
+
+export async function LoginUser(req,res){                    //To run await, the function is specified as async
     const data =req.body;
 
     try{
-        const user =await users.findOne() ;
-            
-            email:data.email
+        const user =await users.findOne({email:data.email}) ;       //The line below in the try will not run until the user fine.  
+                                                                    //The user comes from promises, which are one of the built-in functions of the mongo DB.
         
             if(user==null){
-                res.status(404).json({error:"User is not Found"})
+                res.status(404).json({error:"User is not Found"})           
             }else{
             const ispasswordCorrect=bcrypt.compareSync(data.password,user.password);
+        
             if (ispasswordCorrect){
     
                     const token=jwt.sign({                  //login user Data encripted and  send it frontend 
