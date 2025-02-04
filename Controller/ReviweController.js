@@ -1,13 +1,14 @@
 import Review from "../Models/Review.js";
+import {isToken} from "../Validation/TokenValidation.js"
 
 export async function addReviwe(req,res){           //To run await, the function is specified as async.
-     // console.log(req.user);   //get reqest's user value
-     if (req.user==null){           //check have a token
+    /*  if (req.user==null){           //check have a token
         res.status(401).json({
             Message:"pleace login and Try again"   
         })
         return
-    } 
+    } */ 
+   isToken(req,res);//if you have a token
 
 
 const data =req.body;       //assigning reqest body details  
@@ -32,16 +33,10 @@ try{                                        //The line below in the try will not
 //filter reviwe
 export async function getReviwe(req,res){                //To run await, the function is specified as async.
    
-    if (req.user==null){           //check if you have an token
-        res.status(401).json({
-            Message:"pleace login and Try again"   
-        })
-        return
-    }
+     isToken(req,res);//if you have a token
 
 
-
-    if (req.user.type != "admin"){              //If you are not an admin, only approved reviews will be shown.
+    if (!isItAdmin(req)){              //If you are not an admin, only approved reviews will be shown.
         try{
                 const reviews=await Review.find({isApproved:true});             //The line below in the try will not run until the user fine.  
                     res.status(200).json(reviews);                                              //The user reviews from "promises", which are one of the "built-in functions" of the mongo DB.
@@ -57,7 +52,7 @@ export async function getReviwe(req,res){                //To run await, the fun
 
 
 
-    if(req.user.type =="admin"){                  //If you are an admin, all reviews will be displayed.
+    if(isItAdmin(req)){                  //If you are an admin, all reviews will be displayed.
 
           try{
             const reviews=await Review.find();             //The line below in the try will not run until the user fine.  
@@ -84,14 +79,9 @@ export async function deleteReviwe(req,res){         //To run await, the functio
     const email=req.params.email;
 
     
-    if (req.user==null){           //check if you have an token
-        res.status(401).json({
-            Message:"pleace login and Try again"   
-        })
-        return
-    }
-
-    if(req.user.type== "admin"){                        //If you are an admin, delete all
+    isToken(req,res);//if you have a token
+    
+    if(isItAdmin(req)){                        //If you are an admin, delete all
 
         try{
                 await Review.deleteOne({email:email});                          //The line below in the try will not run until the user fine. 
@@ -103,7 +93,7 @@ export async function deleteReviwe(req,res){         //To run await, the functio
         return
     }
 
-    if (req.user.type=="customer"   &&  req.user.email==email){
+    if (!isItAdmin(req)   &&  req.user.email==email){
 
         try{
                 await Review.deleteOne({email:email});
@@ -127,14 +117,9 @@ export async function approvedReviwe(req,res){              //To run await, the 
     const email=req.params.email;
 
     
-    if (req.user==null){           //check if you have an token
-        res.status(401).json({
-            Message:"pleace login and Try again"   
-        })
-        return
-    }
+    isToken(req,res);//if you have a token
 
-    if(req.user.type == "admin"){      //if bearer token is admin
+    if(isItAdmin(req)){      //if bearer token is admin
         try{
 
             await Review.updateOne({email:email}                //check If the sent email is the same as the email in the database
