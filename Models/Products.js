@@ -33,6 +33,11 @@ const productSchema=new mongoose.Schema({
         required:true,
         default:true
 
+    },
+    Image:{
+        type:String,
+        required:true,
+        default:"http://.com"
     }
 
 })

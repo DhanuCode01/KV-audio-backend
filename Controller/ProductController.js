@@ -91,3 +91,30 @@ export async function updateProduct(req,res){   //update product
     }
 }
 
+export async function deleteProduct(req,res){   //Delete product
+    try{
+        isToken(req,res);//if you have a token
+        if(isItAdmin(req)){
+
+            const key=req.params.key;    //The key of the product that needs to be changed
+
+            const data =req.body;       //The product that needs to be changed
+
+            await products.deleteOne({key,key}) ;  //The 1st key is the product key to be delete, the 2nd key is the parameter key.
+                    res.json({
+                        message:"product delete Successfullly"
+                    })
+            return;
+
+        }else{              //check  authorization(is check the user admin )
+            res.status(403).json({
+                Message:"your are not authorized to perform this acction"   
+            })
+            return;
+        }
+
+    }catch(error){                                                       //If the lines are not running, it is a connection error.
+        res.status(500).json({
+           error:"database connection un successfully"})
+    }
+}
