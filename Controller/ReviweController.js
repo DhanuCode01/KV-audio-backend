@@ -1,5 +1,6 @@
 import Review from "../Models/Review.js";
 import {isToken} from "../Validation/TokenValidation.js"
+import{isItAdmin} from "../Validation/AdminValidation.js"
 
 export async function addReviwe(req,res){           //To run await, the function is specified as async.
     /*  if (req.user==null){           //check have a token
