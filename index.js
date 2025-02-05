@@ -47,8 +47,8 @@ app.use("/api/reviwe",reviweRouter);
 app.use("/api/inquiries",inquiryRouter);
 
 
-app.listen(3000,()=>{
-    console.log("Server port 3000 is running ")
+app.listen(3001,()=>{
+    console.log("Server port 3001 is running ")
     
 });
 

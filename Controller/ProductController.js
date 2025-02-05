@@ -1,6 +1,6 @@
 import products from "../Models/Products.js";
 import {isToken} from "../Validation/TokenValidation.js"
-import {isItAdmin} from "../Validation/AdminValidation.js"
+import {isItAdmin} from "../Validation/UserValidation.js"
 
 export async function  addProduct(req,res){     //add new product 
                                                 //To run await, the function is specified as async.

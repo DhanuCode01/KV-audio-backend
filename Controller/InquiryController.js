@@ -1,12 +1,12 @@
 import Inquiry from "../Models/Inquiry.js";
-import { isItCustomer } from "../Validation/AdminValidation.js";
+import { isItCustomer } from "../Validation/UserValidation.js";
+import {isToken} from "../Validation/TokenValidation.js"
 
 export async function addInquiry (req,res){
     try {
           isToken(req,res);//if you have a token
         if(isItCustomer(req)){
             const data=req.body;
-            console.log(data);
             data.email=req.user.email;
             data.phone=req.user.phone;  
             
