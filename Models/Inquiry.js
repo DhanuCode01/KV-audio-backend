@@ -8,8 +8,7 @@ const inquirySchema=new mongoose.Schema({
     },
     email:{                 //inquiry Email
         type:String,
-        required:true,
-        unique:true
+        required:true
     },
     message:{               //inquiry
         type:String,
