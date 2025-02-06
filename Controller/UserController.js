@@ -49,7 +49,8 @@ export async function LoginUser(req,res){                    //To run await, the
                         lastName:user.lastName,
                         email:user.email,                   
                         type:user.type,
-                        profilePicture:user.profilePicture
+                        profilePicture:user.profilePicture,
+                        phone:user.phone
                     },process.env.jwt_SECRET)
     
                     res.json({success:"Login Successfuly",token:token

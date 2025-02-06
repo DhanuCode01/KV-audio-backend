@@ -6,6 +6,7 @@ import productRouter from "./Router/ProductRouter.js";
 import reviweRouter from "./Router/ReviweRouter.js";
 import jwt from "jsonwebtoken"; //get http reqest (json wep token eka amunamma)
 import dotenv from "dotenv" //hide github private things
+import inquiryRouter from "./Router/InquiryRouter.js";
 
 dotenv.config();//run env file
 
@@ -43,6 +44,7 @@ connection.once("open",()=>{
 app.use("/api/user",userRouter);
 app.use("/api/product",productRouter);
 app.use("/api/reviwe",reviweRouter);
+app.use("/api/inquiries",inquiryRouter);
 
 
 app.listen(3000,()=>{
@@ -50,5 +52,3 @@ app.listen(3000,()=>{
     
 });
 
-
-//
