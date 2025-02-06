@@ -87,9 +87,9 @@ export async function deleteInquiry(req,res) {              //delete the user on
                 })
                 return;
             }else{
-                if(inquiries.email == req.user.email){
+                if(inquiries.email == req.user.email){       //The parameter eke inna  (the id belongs to) customer = token eka haduwa (the token was created by) customer
 
-                    await Inquiry.deleteOne({id:req.params.id});        
+                    await Inquiry.updateOne({id:req.params.id},{message:data.message});   //The customer can only change the message.     
                     res.status(200).json({
                     message:"Inquiry delete Successfully"
                 });
@@ -99,7 +99,7 @@ export async function deleteInquiry(req,res) {              //delete the user on
                     res.status(403).json({
                         Message:"your are not authorized to perform this acction"   
                     })
-                    return
+                    return;
 
                 }
 
@@ -115,4 +115,56 @@ export async function deleteInquiry(req,res) {              //delete the user on
     }
     
     
+}
+
+
+
+export async function updateInquiry(req,res){   //update the customer only their inquiries "message". //delete everything to admin            
+    isToken(req,res);//if you have a token
+
+    try {
+        if(isItAdmin(req)){
+            const data = req.body;
+
+            await Inquiry.updateOne({id:req.params.id},data);        
+            res.status(200).json({
+            message:"Inquiry update Successfully"
+        });
+        }else if(isItCustomer(req)){
+            const data = req.body;
+
+            const inquiries=await Inquiry.findOne({id:req.params.id}); //(Get an id equal to the parameter id from the database and load it into the inquiry.)
+            
+            if(inquiries==null){                                        //have not inquiries or have inquiries
+                res.status(404).json({
+                    message:"Inquiry not found"
+                })
+                return;
+            }else{
+                if(inquiries.email == req.user.email){              //Check if there is an email in the database that matches the parameter email.
+
+                    await Inquiry.updateOne({id:req.params.id},{message : data.message});  //If so, just update the message.      
+                    res.status(200).json({
+                    message:"Inquiry update Successfully"
+                });
+                return;
+
+                }else{
+                    res.status(403).json({
+                        Message:"your are not authorized to perform this acction"   
+                    })
+                    return
+
+                }
+
+            }
+                
+
+        }
+        
+    }catch(error){  
+        console.log(error);                                                    //If the lines are not running, it is a connection error.
+        res.status(500).json({
+           error:"database connection unsuccessfully"})
+    }
 }
